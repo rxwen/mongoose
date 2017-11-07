@@ -5351,6 +5351,13 @@ int mg_mqtt_match_topic_expression(struct mg_str exp, struct mg_str topic);
  */
 int mg_mqtt_vmatch_topic_expression(const char *exp, struct mg_str topic);
 
+/*
+ * Parse the data at the beginning of a mbuf as mqtt package.
+ *
+ * Returns mqtt package length if a complete package if found; -1 otherwise.
+ */
+int mg_parse_mqtt(struct mbuf *io, struct mg_mqtt_message *mm);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

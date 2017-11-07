@@ -71,6 +71,10 @@ struct mg_mqtt_message;
 MG_INTERNAL int parse_mqtt(struct mbuf *io, struct mg_mqtt_message *mm);
 #endif
 
+int mg_parse_mqtt(struct mbuf *io, struct mg_mqtt_message *mm) {
+    return parse_mqtt(io, mm);
+}
+
 /* Forward declarations for testing. */
 extern void *(*test_malloc)(size_t size);
 extern void *(*test_calloc)(size_t count, size_t size);
