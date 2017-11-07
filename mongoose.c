@@ -3873,10 +3873,14 @@ time_t mg_socket_if_poll(struct mg_iface *iface, int timeout_ms) {
   }
   if (timeout_ms < 0) timeout_ms = 0;
 
-  tv.tv_sec = timeout_ms / 1000;
-  tv.tv_usec = (timeout_ms % 1000) * 1000;
+  if(timeout_ms > 0) {
+      tv.tv_sec = timeout_ms / 1000;
+      tv.tv_usec = (timeout_ms % 1000) * 1000;
 
-  num_ev = select((int) max_fd + 1, &read_set, &write_set, &err_set, &tv);
+      num_ev = select((int) max_fd + 1, &read_set, &write_set, &err_set, &tv);
+  } else {
+      num_ev = select((int) max_fd + 1, &read_set, &write_set, &err_set, NULL);
+  }
   now = mg_time();
 #if 0
   DBG(("select @ %ld num_ev=%d of %d, timeout=%d", (long) now, num_ev, num_fds,
@@ -14326,7 +14330,11 @@ time_t mg_sl_if_poll(struct mg_iface *iface, int timeout_ms) {
   tv.tv_usec = (timeout_ms % 1000) * 1000;
 
   if (num_fds > 0) {
-    num_ev = sl_Select((int) max_fd + 1, &read_set, &write_set, &err_set, &tv);
+      if(0 == timeout_ms) {
+        num_ev = sl_Select((int) max_fd + 1, &read_set, &write_set, &err_set, NULL);
+      } else {
+        num_ev = sl_Select((int) max_fd + 1, &read_set, &write_set, &err_set, &tv);
+      }
   }
 
   now = mg_time();
