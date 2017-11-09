@@ -69,11 +69,12 @@ struct ctl_msg {
 #if MG_ENABLE_MQTT
 struct mg_mqtt_message;
 MG_INTERNAL int parse_mqtt(struct mbuf *io, struct mg_mqtt_message *mm);
-#endif
 
 int mg_parse_mqtt(struct mbuf *io, struct mg_mqtt_message *mm) {
     return parse_mqtt(io, mm);
 }
+
+#endif
 
 /* Forward declarations for testing. */
 extern void *(*test_malloc)(size_t size);
@@ -9639,6 +9640,13 @@ static void mg_ws_mask_frame(struct mbuf *mbuf, struct ws_mask_ctx *ctx) {
   for (i = 0; i < (mbuf->len - ctx->pos); i++) {
     mbuf->buf[ctx->pos + i] ^= ((char *) &ctx->mask)[i % 4];
   }
+}
+
+void mg_send_websocket_header(struct mg_connection *nc, int op, size_t len) {
+  struct ws_mask_ctx ctx;
+  DBG(("%p %d %d", nc, op, (int) len));
+  mg_send_ws_header(nc, op, len, &ctx);
+  mg_ws_mask_frame(&nc->send_mbuf, &ctx);
 }
 
 void mg_send_websocket_frame(struct mg_connection *nc, int op, const void *data,

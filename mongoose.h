@@ -4467,6 +4467,23 @@ void mg_send_websocket_framev(struct mg_connection *nc, int op_and_flags,
 void mg_printf_websocket_frame(struct mg_connection *nc, int op_and_flags,
                                const char *fmt, ...);
 
+/*
+ * Sends WebSocket header to the remote end.
+ *
+ * `op` specifies the frame's type. It's one of:
+ *
+ * - WEBSOCKET_OP_CONTINUE
+ * - WEBSOCKET_OP_TEXT
+ * - WEBSOCKET_OP_BINARY
+ * - WEBSOCKET_OP_CLOSE
+ * - WEBSOCKET_OP_PING
+ * - WEBSOCKET_OP_PONG
+ *
+ * `len` specifies the length of body.
+ *
+ */
+void mg_send_websocket_header(struct mg_connection *nc, int op, size_t len);
+
 /* Websocket opcodes, from http://tools.ietf.org/html/rfc6455 */
 #define WEBSOCKET_OP_CONTINUE 0
 #define WEBSOCKET_OP_TEXT 1
