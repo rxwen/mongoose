@@ -9714,10 +9714,12 @@ MG_INTERNAL void mg_ws_handler(struct mg_connection *nc, int ev,
     case MG_EV_POLL:
       /* Ping idle websocket connections */
       {
-        time_t now = *(time_t *) ev_data;
-        if (nc->flags & MG_F_IS_WEBSOCKET &&
-            now > nc->last_io_time + MG_WEBSOCKET_PING_INTERVAL_SECONDS) {
-          mg_send_websocket_frame(nc, WEBSOCKET_OP_PING, "", 0);
+        if(MG_WEBSOCKET_PING_INTERVAL_SECONDS > 0) {
+            time_t now = *(time_t *) ev_data;
+            if (nc->flags & MG_F_IS_WEBSOCKET &&
+                now > nc->last_io_time + MG_WEBSOCKET_PING_INTERVAL_SECONDS) {
+              mg_send_websocket_frame(nc, WEBSOCKET_OP_PING, "", 0);
+            }
         }
       }
       break;
