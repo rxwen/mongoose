@@ -4491,6 +4491,7 @@ void mg_send_websocket_header(struct mg_connection *nc, int op, size_t len);
 #define WEBSOCKET_OP_CLOSE 8
 #define WEBSOCKET_OP_PING 9
 #define WEBSOCKET_OP_PONG 10
+#define WEBSOCKET_OP_SEND_BINARY_IMMEDIATELY 13
 
 /*
  * If set causes the FIN flag to not be set on outbound
